@@ -15,6 +15,9 @@ use nkgPollBundle\Entity\PollRepository;
 use nkgPollBundle\Entity\Opinion;
 use nkgPollBundle\Entity\OpinionRepository;
 
+use nkgPollBundle\Form\Type\PollType;
+use nkgPollBundle\Form\Type\OpinionType;
+
 class AdminController extends Controller
 {
     //lister les sondages
@@ -45,14 +48,8 @@ class AdminController extends Controller
         ->find($poll_id);
 
         //formulaire d'édition du poll
-        $form = $this->createFormBuilder($poll)
-        ->add('libelle', 'text')
-        ->add('description', 'textarea')
-        ->add('startdate', 'datetime')
-        ->add('enddate', 'datetime')
-        ->add('active', 'checkbox')
-        ->add('VALIDER', 'submit')
-        ->getForm();
+        $form = $this->createForm(new PollType(), $poll);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -76,14 +73,7 @@ class AdminController extends Controller
     public function createPollAction(Request $request)
     {
       $poll = new Poll();
-      $form = $this->createFormBuilder($poll)
-      ->add('libelle', 'text')
-      ->add('description', 'textarea')
-      ->add('startdate', 'datetime')
-      ->add('enddate', 'datetime')
-      ->add('active', 'checkbox')
-      ->add('VALIDER', 'submit')
-      ->getForm();
+      $form = $this->createForm(new PollType(), $poll);
 
       $form->handleRequest($request);
 
@@ -160,11 +150,8 @@ class AdminController extends Controller
       ->getRepository('nkgPollBundle:Opinion')
       ->find($opinion_id);
 
-      $form = $this->createFormBuilder($opinion)
-      ->add('libelle', 'text')
-      ->add('description', 'textarea')
-      ->add('VALIDER', 'submit')
-      ->getForm();
+      $form = $this->createForm(new OpinionType(), $opinion);
+
       $form->handleRequest($request);
 
       if ($form->isSubmitted() && $form->isValid()) {
@@ -194,11 +181,7 @@ class AdminController extends Controller
       $poll_id = $request->get('poll_id');
 
       $opinion = new Opinion();
-      $form = $this->createFormBuilder($opinion)
-      ->add('libelle', 'text')
-      ->add('description', 'textarea')
-      ->add('VALIDER', 'submit')
-      ->getForm();
+      $form = $this->createForm(new OpinionType(), $opinion);
 
       $form->handleRequest($request);
 
