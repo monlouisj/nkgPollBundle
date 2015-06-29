@@ -1,0 +1,42 @@
+{% extends 'nkgPollBundle::base.html.twig' %}
+{% block body %}
+<div class="container">
+  <div class="row">
+    <h1>Opinions du sondage</h1>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a class="btn btn-success" href="{{ path('_createopinion' , {'poll_id': poll_id }) }}">+ Nouvel item</a>
+      <a class="btn btn-default" href="{{ path('_adminlist') }}">Retour</a>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped">
+    		<thead>
+    			<td>LIBELLÉ</td>
+    			<td>DESCRIPTION</td>
+    			<td>VOTES</td>
+    			<td>DERNIER VOTE</td>
+    		</thead>
+    		<tbody>
+          {% for opinion in opinionz %}
+            <tr>
+              <td>{{opinion.libelle}}</td>
+              <td>{{opinion.description}}</td>
+              <td>{{opinion.votes}}</td>
+              <td>{{opinion.lastvoteat|date("d/m/Y H:i:s")}}</td>
+              <td>
+                <a class="btn btn-default btn-sm" href="{{ path('_editopinion' , {'opinion_id': opinion.id } ) }}">Modifier</a>
+              </td>
+              <td>
+                <a class="btn btn-danger btn-sm" href="{{ path('_deleteopinion' , {'opinion_id': opinion.id} ) }}">Suppr</a>
+              </td>
+            </tr>
+          {% endfor %}
+    		</tbody>
+    	</table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
