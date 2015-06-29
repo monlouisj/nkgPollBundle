@@ -127,6 +127,19 @@ class Opinion
     }
 
     /**
+     * Add 1 vote
+     *
+     * @param integer $votes
+     * @return Opinion
+     */
+    public function addVote()
+    {
+        $this->votes += 1;
+
+        return $this;
+    }
+
+    /**
      * Get votes
      *
      * @return integer
