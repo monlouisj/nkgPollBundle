@@ -78,14 +78,13 @@ class SiteController extends Controller
       $poll_id = $nkgPoll->getPollIdFromOpinion($opinion_id);
 
       //si l'utilisateur a déjà voté
-      if($session->get("did_vote") == $poll_id){
+      if($session->get("did_vote") === $poll_id){
         return $this->render('nkgPollBundle:front:front.fail.html.twig');
+      }else{
+        $nkgOpinion->addVote($opinion_id);
+        //enregistrer vote en session
+        $session->set("did_vote", $poll_id);
       }
-
-      $nkgOpinion->addVote($opinion_id);
-
-      //enregistrer vote en session
-      $session->set("did_vote", $poll_id);
 
       return $this->render('nkgPollBundle:front:front.voted.html.twig',
       array("poll_id"=> $poll_id )
