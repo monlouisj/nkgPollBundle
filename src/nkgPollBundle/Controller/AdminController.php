@@ -26,9 +26,9 @@ class AdminController extends Controller
      */
     public function listPollAction()
     {
-        $pollz = $this->getDoctrine()
-        ->getRepository('nkgPollBundle:Poll')
-        ->findAll();
+        $nkgPoll = $this->get('nkg.poll');
+        $pollz = $nkgPoll->getAllPolls();
+
         return $this->render('nkgPollBundle:admin:admin.poll.list.html.twig',
         array("pollz"=> $pollz)
         );
@@ -43,9 +43,8 @@ class AdminController extends Controller
         $poll_id = $request->get('poll_id');
 
         //récupérer l'entité poll
-        $poll = $this->getDoctrine()
-        ->getRepository('nkgPollBundle:Poll')
-        ->find($poll_id);
+        $nkgPoll = $this->get('nkg.poll');
+        $poll = $nkgPoll->getPoll($poll_id);
 
         //formulaire d'édition du poll
         $form = $this->createForm(new PollType(), $poll);
@@ -53,11 +52,7 @@ class AdminController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-          $em = $this->getDoctrine()->getManager();
-          $poll->setModifiedat(new \DateTime('now'));
-          //enregistrer les modifs
-          $em->persist($poll);
-          $em->flush();
+          $nkgPoll->savePoll($poll);
           return new RedirectResponse($this->generateUrl('_adminlist'));
         }
 
@@ -72,19 +67,18 @@ class AdminController extends Controller
      */
     public function createPollAction(Request $request)
     {
+      $nkgPoll = $this->get('nkg.poll');
+
       $poll = new Poll();
       $form = $this->createForm(new PollType(), $poll);
 
       $form->handleRequest($request);
 
       if ($form->isSubmitted() && $form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-        $poll->setCreatedat(new \DateTime('now'));
-        $poll->setModifiedat(new \DateTime('now'));
-
         //enregistrer les modifs
-        $em->persist($poll);
-        $em->flush();
+        $poll->setCreatedat(new \DateTime('now'));
+        $nkgPoll->savePoll($poll);
+
         $poll_id = $poll->getId();
         //aller à la création d'opinion
         return new RedirectResponse($this->generateUrl('_listopinion', array("poll_id" =>$poll_id)));
@@ -102,15 +96,10 @@ class AdminController extends Controller
     public function deletePollAction(Request $request)
     {
         $poll_id = $request->get('poll_id');
-
-        $poll = $this->getDoctrine()
-        ->getRepository('nkgPollBundle:Poll')
-        ->find($poll_id);
+        $nkgPoll = $this->get('nkg.poll');
 
         //supprimer le sondage
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($poll);
-        $em->flush();
+        $nkgPoll->deletePoll($poll_id);
 
         return new RedirectResponse($this->generateUrl('_adminlist'));
     }
@@ -125,10 +114,9 @@ class AdminController extends Controller
         $session = $request->getSession();
         $session->set("poll_id", $poll_id);
 
-        $opinionz = $this->getDoctrine()
-        ->getRepository('nkgPollBundle:Poll')
-        ->find($poll_id)
-        ->getOpinions();
+        $nkgOpinion = $this->get('nkg.opinion');
+
+        $opinionz = $nkgOpinion->getOpinions($poll_id);
 
         return $this->render("nkgPollBundle:admin:admin.opinion.list.html.twig",
         array(
@@ -146,20 +134,18 @@ class AdminController extends Controller
     {
       $opinion_id = $request->get('opinion_id');
 
-      $opinion = $this->getDoctrine()
-      ->getRepository('nkgPollBundle:Opinion')
-      ->find($opinion_id);
+      $nkgOpinion = $this->get('nkg.opinion');
+
+      $opinion = $nkgOpinion->getOpinion($opinion_id);
 
       $form = $this->createForm(new OpinionType(), $opinion);
 
       $form->handleRequest($request);
 
       if ($form->isSubmitted() && $form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($opinion);
-        $em->flush();
-        $session = $request->getSession();
-        $poll_id = $session->get('poll_id');
+        $nkgOpinion->saveOpinion($opinion);
+
+        $poll_id = $opinion->getPoll()->getId();
 
         return new RedirectResponse($this->generateUrl('_listopinion', array("poll_id" =>$poll_id)));
       }
@@ -179,6 +165,7 @@ class AdminController extends Controller
     public function createOpinionAction(Request $request)
     {
       $poll_id = $request->get('poll_id');
+      $nkgPoll = $this->get('nkg.poll');
 
       $opinion = new Opinion();
       $form = $this->createForm(new OpinionType(), $opinion);
@@ -186,19 +173,7 @@ class AdminController extends Controller
       $form->handleRequest($request);
 
       if ($form->isSubmitted() && $form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-
-        $poll = $this->getDoctrine()
-        ->getRepository('nkgPollBundle:Poll')
-        ->find($poll_id)
-        ->addOpinion($opinion);
-        $opinion->setPoll($poll);
-
-        $em->persist($poll);
-        $em->persist($opinion);
-
-        $em->flush();
-
+        $nkgPoll->addOpinion($poll_id,$opinion);
         return new RedirectResponse($this->generateUrl('_listopinion', array("poll_id" =>$poll_id)));
       }
 
@@ -208,21 +183,17 @@ class AdminController extends Controller
       ));
     }
 
-    //supprimer un sondage
+    //supprimer une opinion
     /**
      * @Route("/admin/opinion/delete/{opinion_id}",name="_deleteopinion")
      */
     public function deleteOpinionAction(Request $request)
     {
       $opinion_id = $request->get('opinion_id');
-      $opinion = $this->getDoctrine()
-      ->getRepository('nkgPollBundle:Opinion')
-      ->find($opinion_id);
+      $nkgOpinion = $this->get('nkg.opinion');
 
       //supprimer l'opinion
-      $em = $this->getDoctrine()->getManager();
-      $em->remove($opinion);
-      $em->flush();
+      $nkgOpinion->deleteOpinion($opinion_id);
 
       $session = $request->getSession();
       $poll_id = $session->get('poll_id');

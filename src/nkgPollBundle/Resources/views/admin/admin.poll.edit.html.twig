@@ -16,43 +16,47 @@
     <div class="panel-body">
       {{ form_start(form) }}
           {{ form_errors(form) }}
-          <div class="form-group">
-              <label>Libellé</label>
-              {{ form_widget(form.libelle,{'attr':{'class':'form-control input-lg'}}) }}
-              {{ form_errors(form.libelle) }}
-          </div>
-          <div class="form-group">
-              <label>Description</label>
-              {{ form_widget(form.description,{'attr':{'class':'form-control input-lg'}}) }}
-              {{ form_errors(form.description) }}
+          <div class="col-md-12">
+            <div class="form-group">
+                <label>Libellé</label>
+                {{ form_widget(form.libelle,{'attr':{'class':'form-control input-lg'}}) }}
+                {{ form_errors(form.libelle) }}
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                {{ form_widget(form.description,{'attr':{'class':'form-control input-lg'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
           </div>
           <div class="col-md-12">
-          <div class="col-md-6">
-            <div class="form-group">
-                <label>Date de début</label>
-                {{ form_widget(form.startdate,{'attr':{'class':'form-dateselectz'}}) }}
-                {{ form_errors(form.startdate) }}
+            <div class="col-md-6">
+              <div class="form-group">
+                  <label>Date de début</label>
+                  {{ form_widget(form.startdate,{'attr':{'class':'form-dateselectz'}}) }}
+                  {{ form_errors(form.startdate) }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                  <label>Date de fin</label>
+                  {{ form_widget(form.enddate,{'attr':{'class':'form-dateselectz'}}) }}
+                  {{ form_errors(form.enddate) }}
+              </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="form-group">
-                <label>Date de fin</label>
-                {{ form_widget(form.enddate,{'attr':{'class':'form-dateselectz'}}) }}
-                {{ form_errors(form.enddate) }}
+          <div class="col-md-12">
+            <div class="checkbox">
+                <label>
+                {{ form_widget(form.active) }}ACTIVER
+                </label>
+                {{ form_errors(form.active) }}
             </div>
           </div>
-          </div>
-
-          <div class="checkbox">
-              <label>
-              {{ form_widget(form.active) }}Activer
-              </label>
-              {{ form_errors(form.active) }}
-          </div>
-
-          <div class="form-group">
-              {{ form_widget(form.VALIDER,{'attr':{'class':' btn btn-warning btn-lg'}}) }}
-              <a class="btn btn-default btn-lg" href="{{ path('_adminlist') }}">Retour à l'accueil</a>
+          <div class="col-md-12">
+            <div class="form-group">
+                {{ form_widget(form.VALIDER,{'attr':{'class':' btn btn-warning btn-lg'}}) }}
+                <a class="btn btn-default btn-lg" href="{{ path('_adminlist') }}">Retour à l'accueil</a>
+            </div>
           </div>
       {{ form_end(form) }}
     </div>

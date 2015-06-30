@@ -18,14 +18,14 @@ use nkgPollBundle\Entity\OpinionRepository;
 class SiteController extends Controller
 {
 
+  //lister les sondages actifs
   /**
    * @Route("/front/" ,name="_frontlist")
    */
   public function listPollAction()
   {
-      $pollz = $this->getDoctrine()
-      ->getRepository('nkgPollBundle:Poll')
-      ->findBy(array("active" =>1));
+      $nkgPoll = $this->get('nkg.poll');
+      $pollz = $nkgPoll->getActivePolls();
 
       return $this->render('nkgPollBundle:front:front.poll.list.html.twig',
       array("pollz"=> $pollz)
@@ -40,13 +40,8 @@ class SiteController extends Controller
   {
       $poll_id = $request->get('poll_id');
 
-      $opinionz = $this->getDoctrine()
-      ->getRepository('nkgPollBundle:Poll')
-      ->findOneBy(array(
-        "id" => (int)$poll_id,
-        "active" => 1
-        )
-      )->getOpinions();
+      $nkgOpinion = $this->get('nkg.opinion');
+      $opinionz = $nkgOpinion->getVotableOpinions($poll_id);
 
       return $this->render('nkgPollBundle:front:front.opinion.list.html.twig',
       array("opinionz"=> $opinionz)
@@ -61,12 +56,8 @@ class SiteController extends Controller
   {
       $poll_id = $request->get('poll_id');
 
-      $opinionz = $this->getDoctrine()
-      ->getRepository('nkgPollBundle:Poll')
-      ->find($poll_id)
-      ->getOpinions();
-
-      $opinionz = $this->aggregate($opinionz);
+      $nkgPoll = $this->get('nkg.poll');
+      $opinionz = $nkgPoll->getResultOf($poll_id);
 
       return $this->render('nkgPollBundle:front:front.result.html.twig',
       array("opinionz"=> $opinionz)
@@ -80,48 +71,24 @@ class SiteController extends Controller
   public function votePollAction(Request $request)
   {
       $session = $request->getSession();
+      $opinion_id = $request->get('opinion_id');
+      $nkgOpinion = $this->get('nkg.opinion');
+      $nkgPoll = $this->get('nkg.poll');
+
+      $poll_id = $nkgPoll->getPollIdFromOpinion($opinion_id);
+
       //si l'utilisateur a déjà voté
-      if($session->get("a_vote")){
+      if($session->get("did_vote") == $poll_id){
         return $this->render('nkgPollBundle:front:front.fail.html.twig');
       }
 
-      $opinion_id = $request->get('opinion_id');
-
-      $opinion = $this->getDoctrine()
-      ->getRepository('nkgPollBundle:Opinion')
-      ->find($opinion_id);
-
-      //ajouter un vote
-      $opinion->addVote();
-      //marquer la date du dernier vote
-      $opinion->setLastvoteat( new \DateTime('now'));
-
-      $em = $this->getDoctrine()->getManager();
-      $em->persist($opinion);
-      $em->flush();
+      $nkgOpinion->addVote($opinion_id);
 
       //enregistrer vote en session
-      $session->set("a_vote", true);
+      $session->set("did_vote", $poll_id);
 
       return $this->render('nkgPollBundle:front:front.voted.html.twig',
-      array("poll_id"=> $opinion->getPoll()->getId())
+      array("poll_id"=> $poll_id )
       );
-  }
-
-  //calculer les totaux et pourcentages des votes
-  private function aggregate($opinionz){
-    $count = count($opinionz);
-    $total = 0;
-
-    foreach ($opinionz as $opinion) {
-      $int_Votes = intval($opinion->getVotes());
-      $votes = $int_Votes? $int_Votes : 0;
-      $total += $votes;
-    }
-
-    foreach ($opinionz as $i => $opinion) {
-      $opinionz[$i]->pct = $opinion->getVotes() / $total * 100;
-    }
-    return $opinionz;
   }
 }

@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Poll
 {
      /**
-     * @ORM\OneToMany(targetEntity="Opinion", mappedBy="poll", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Opinion", mappedBy="poll", cascade={"persist","remove"})
      */
     protected $opinions;
 
