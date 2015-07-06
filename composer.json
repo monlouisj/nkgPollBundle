@@ -6,6 +6,5 @@
     },
 	"autoload": {
         "psr-0": { "nkg\\PollBundle": "" }
-    },
-    "target-dir": "nkg/PollBundle"
+    }
 }
