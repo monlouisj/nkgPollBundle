@@ -1,5 +1,5 @@
 {
-    "name": "nkg/PollBundle",
+    "name": "nkg/poll-bundle",
     "description": "Poll bundle for Symfony 2 with simple polls and opinion administration.",
     "require": {
         "php": ">=5.3.0"
