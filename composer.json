@@ -3,5 +3,9 @@
     "description": "Poll bundle for Symfony 2 with simple polls and opinion administration.",
     "require": {
         "php": ">=5.3.0"
-    }
+    },
+	"autoload": {
+        "psr-0": { "nkg\\PollBundle": "" }
+    },
+    "target-dir": "nkg/PollBundle"
 }
