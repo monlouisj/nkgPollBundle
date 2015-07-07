@@ -14,7 +14,7 @@ Simply publish and administrate polls within your Symfony2 application.
 4 - import routes (they are defined in Annotation) in your routing.yml
 ```
 app:
-    resource: "@nkgPollBundle/Controller/"
+    resource: "@NkgPollBundle/Controller/"
     type:     annotation
 ```
 <br/>
