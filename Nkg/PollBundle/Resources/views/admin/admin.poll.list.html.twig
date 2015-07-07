@@ -1,0 +1,52 @@
+{% extends 'NkgPollBundle::base.html.twig' %}
+{% block body %}
+<div class="container">
+
+  <div class="row">
+    <h1>Administration des sondages</h1>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a class="btn btn-success" href="{{ path('_createpoll') }}">+ Nouveau sondage</a>
+    </div>
+    <div class="panel-body">
+      <table class="table">
+    		<thead>
+    			<td>LIBELLÉ</td>
+    			<td>DESCRIPTION</td>
+    			<td>DATE DÉBUT</td>
+    			<td>DATE FIN</td>
+    			<td>ACTIVER</td>
+    		</thead>
+    		<tbody>
+          {% for poll in pollz %}
+            <tr>
+              <td>{{poll.libelle}}</td>
+              <td>{{poll.description}}</td>
+              <td>{{poll.startdate|date("d/m/Y H:i:s")}}</td>
+              <td>{{poll.enddate|date("d/m/Y H:i:s")}}</td>
+              <td>
+              {% if poll.active == 1 %}
+                <b>ON</b>
+              {% else %}
+                OFF
+              {% endif %}
+              </td>
+              <td>
+                <a class="btn btn-info btn-sm" href="{{ path('_listopinion' , {'poll_id': poll.id } ) }}">Opinions</a>
+              </td>
+              <td>
+                <a class="btn btn-default btn-sm" href="{{ path('_editpoll' , {'poll_id': poll.id } ) }}">Modifier</a>
+              </td>
+              <td>
+                <a class="btn btn-danger btn-sm" href="{{ path('_deletepoll' , {'poll_id': poll.id} ) }}">Supprimer</a>
+              </td>
+            </tr>
+          {% endfor %}
+    		</tbody>
+    	</table>
+    </div>
+  </div>
+</div>
+{% endblock %}

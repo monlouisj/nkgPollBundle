@@ -1,0 +1,35 @@
+{% extends 'NkgPollBundle::base.html.twig' %}
+{% block body %}
+<div class="container">
+  <div class="row">
+    <h1>Opinions du sondage</h1>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a class="btn btn-default" href="{{ path('_adminlist') }}">Retour</a>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped">
+    		<thead>
+    			<td>LIBELLÉ</td>
+    			<td>DESCRIPTION</td>
+    			<td></td>
+    		</thead>
+    		<tbody>
+          {% for opinion in opinionz %}
+            <tr>
+              <td>{{opinion.libelle}}</td>
+              <td>{{opinion.description}}</td>
+              <td>
+                <a class="btn btn-default btn-sm" href="{{ path('_frontopinionvote' , {'opinion_id': opinion.id } ) }}">VOTER</a>
+              </td>
+            </tr>
+          {% endfor %}
+    		</tbody>
+    	</table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

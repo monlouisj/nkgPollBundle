@@ -1,0 +1,35 @@
+{% extends 'NkgPollBundle::base.html.twig' %}
+{% block body %}
+<div class="container">
+
+  <div class="row">
+    <h1>Les sondages</h1>
+  </div>
+
+    <div class="panel-body">
+      <table class="table table-striped">
+    		<thead>
+    			<td>LIBELLÉ</td>
+    			<td>DESCRIPTION</td>
+    			<td>DATE DÉBUT</td>
+    			<td>DATE FIN</td>
+    			<td></td>
+    		</thead>
+    		<tbody>
+          {% for poll in pollz %}
+            <tr>
+              <td>{{poll.libelle}}</td>
+              <td>{{poll.description}}</td>
+              <td>{{poll.startdate|date("d/m/Y H:i:s")}}</td>
+              <td>{{poll.enddate|date("d/m/Y H:i:s")}}</td>
+              <td>
+                <a class="btn btn-info btn-sm" href="{{ path('_frontlistopinion' , {'poll_id': poll.id } ) }}">Ouvrir</a>
+              </td>
+            </tr>
+          {% endfor %}
+    		</tbody>
+    	</table>
+    </div>
+
+</div>
+{% endblock %}
