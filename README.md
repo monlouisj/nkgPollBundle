@@ -29,3 +29,7 @@ Voting:
 ```
   /front/
 ```
+Results:
+```
+/front/result/{poll_id}
+```
