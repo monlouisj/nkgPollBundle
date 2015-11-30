@@ -18,6 +18,13 @@ app:
     type:     annotation
 ```
 
-Services classes
+5 - add this entity manager to your config.yml : 
+```
+NkgPollBundle: ~
+```
+
+<h3>Services classes</h3>
 
 Nkg\PollBundle\Services
+
+
