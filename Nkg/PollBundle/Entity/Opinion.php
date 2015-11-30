@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Opinion
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Poll", inversedBy="opinion")
+     * @ORM\ManyToOne(targetEntity="Poll", inversedBy="opinions")
      * @ORM\JoinColumn(name="poll_id", referencedColumnName="id")
      */
     protected $poll;
