@@ -17,19 +17,7 @@ app:
     resource: "@NkgPollBundle/Controller/"
     type:     annotation
 ```
-<br/>
-<h3>Default routes:</h3>
 
-Administration:
-```
-  /polladmin/poll/list/
-```
+Services classes
 
-Voting:
-```
-  /front/
-```
-Results:
-```
-/front/result/{poll_id}
-```
+Nkg\PollBundle\Services

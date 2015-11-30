@@ -134,7 +134,7 @@ class Opinion
      */
     public function addVote()
     {
-        $this->votes += 1;
+        $this->votes = (int) $this->votes + 1;
 
         return $this;
     }

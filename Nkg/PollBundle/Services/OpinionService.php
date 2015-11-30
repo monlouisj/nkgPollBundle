@@ -75,9 +75,9 @@ class OpinionService
     //marquer la date du dernier vote
     $opinion->setLastvoteat( new \DateTime('now'));
 
-    $this->em->persist($opinion);
-    $this->em->flush();
-
+    // $this->em->persist($opinion);
+    // $this->em->flush();
+    $this->saveOpinion($opinion);
     return $opinion;
   }
 
@@ -87,6 +87,7 @@ class OpinionService
     //enregistrer les modifs
     $this->em->persist($opinion);
     $this->em->flush();
+    $this->em->clear();
 
     return $opinion;
   }

@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Poll
  *
  * @ORM\Table()
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="Nkg\PollBundle\Entity\PollRepository")
  */
 class Poll
@@ -22,6 +23,18 @@ class Poll
     {
         $this->opinions = new ArrayCollection();
     }
+    /** @ORM\PrePersist
+    * @ORM\PreUpdate()
+    */
+     function onPrePersist()
+     {
+        $now = new \DateTime("now");
+        if(is_null($this->getCreatedat())){
+         $this->setCreatedat($now);
+        }
+        $this->setModifiedat($now);
+        return $this;
+     }
 
     /**
      * @var integer
@@ -284,5 +297,9 @@ class Poll
     public function getOpinions()
     {
         return $this->opinions;
+    }
+    public function __toString()
+    {
+      return $this->libelle;
     }
 }

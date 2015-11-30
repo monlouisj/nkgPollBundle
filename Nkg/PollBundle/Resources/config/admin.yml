@@ -1,0 +1,23 @@
+services:
+#reponses
+    sonata.admin.opinions:
+        class: Nkg\PollBundle\Admin\OpinionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Sondages", label: "Reponses" }
+        arguments:
+            - ~
+            - Nkg\PollBundle\Entity\Opinion
+            - ~
+        calls:
+            - [ setTranslationDomain, [NkgPollBundle]]
+#sondages
+    sonata.admin.poll:
+        class: Nkg\PollBundle\Admin\PollAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Sondages", label: "Sondage" }
+        arguments:
+            - ~
+            - Nkg\PollBundle\Entity\Poll
+            - ~
+        calls:
+            - [ setTranslationDomain, [NkgPollBundle]]
