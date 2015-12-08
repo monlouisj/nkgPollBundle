@@ -15,6 +15,8 @@ class OpinionAdmin extends Admin
         $formMapper
             ->add('libelle', 'text', array('label' => 'Libelle reponse'))
             ->add('description', 'text', array('label' => 'Description reponse'))
+            ->add('optional1', 'text', array('label' => 'Optional 1', "required"=>false))
+            ->add('optional2', 'text', array('label' => 'Optional 2', "required"=>false))
             ->add('poll')
         ;
     }

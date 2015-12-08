@@ -43,6 +43,20 @@ class Opinion
     private $description;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="optional1", type="string", nullable=true)
+     */
+    private $optional1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="optional2", type="string", nullable=true)
+     */
+    private $optional2;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="votes", nullable=true, type="integer")
@@ -111,6 +125,52 @@ class Opinion
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set optional1
+     *
+     * @param string $optional1
+     * @return Opinion
+     */
+    public function setOptional1($optional1)
+    {
+        $this->optional1 = $optional1;
+
+        return $this;
+    }
+
+    /**
+     * Get optional1
+     *
+     * @return string
+     */
+    public function getOptional1()
+    {
+        return $this->optional1;
+    }
+
+    /**
+     * Set optional2
+     *
+     * @param string $optional2
+     * @return Opinion
+     */
+    public function setOptional2($optional2)
+    {
+        $this->optional2 = $optional2;
+
+        return $this;
+    }
+
+    /**
+     * Get optional2
+     *
+     * @return string
+     */
+    public function getOptional2()
+    {
+        return $this->optional2;
     }
 
     /**
