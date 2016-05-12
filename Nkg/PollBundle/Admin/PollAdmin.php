@@ -73,4 +73,26 @@ class PollAdmin extends Admin
 
         return $poll;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prePersist($object)
+    {
+        //set poll for opinions
+        foreach($object->getOpinions() as $opinion) {
+            $opinion->setPoll($object);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function preUpdate($object)
+    {
+        //set poll for opinions
+        foreach($object->getOpinions() as $opinion) {
+            $opinion->setPoll($object);
+        }
+    }
 }
